@@ -5,6 +5,12 @@ var brickGroup, brickImage;
 var coinsGroup, coinImage;
 var coinScore = 0;
 
+var obstaclesGroup, obstacle1, 
+turtleObstacleImage, obstacle3;
+
+
+
+
 function preload() {
   mario_running = loadAnimation(
     "mar1.png",
@@ -27,6 +33,23 @@ function preload() {
     "con6.png"
   );
   coinSound = loadSound("coinSound.mp3");
+  mushObstacleImage = loadAnimation(
+    "mush1.png",
+    "mush2.png",
+    "mush3.png",
+    "mush4.png",
+    "mush5.png",
+    "mush6.png"
+  );
+  turtleObstacleImage = loadAnimation(
+    "tur1.png",
+    "tur2.png",
+    "tur3.png",
+    "tur4.png",
+    "tur5.png"
+  );
+  obstacle3 = loadImage("obs3.png");
+  dieSound = loadSound("dieSound.mp3");
 }
 
 function setup() {
@@ -60,6 +83,8 @@ function setup() {
   bricksGroup = new Group();
   coinsGroup = new Group();
   coinScore = 0;
+  obstaclesGroup = new Group();
+
 }
 
 function draw() {
@@ -99,6 +124,7 @@ function draw() {
 
     spawnCoins();
     spawnBricks();
+    generateObstacles();
 
     mario.collide(invisibleGround);
     drawSprites();
@@ -127,5 +153,27 @@ function spawnCoins() {
     coin.velocityX = -3;
     coin.lifetime = 1200;
     coinsGroup.add(coin);
+  }
+}
+
+function generateObstacles() {
+  if (frameCount % 100 === 0) {
+    var obstacle = createSprite(1200, 545, 10, 40);
+    obstacle.velocityX = -4;
+    obstacle.scale = 0.2;
+    switch (Math.round(random(1, 2))) {
+      case 1:
+        obstacle.addAnimation("mush", mushObstacleImage);
+        break;
+      case 2:
+        obstacle.addAnimation("turtle", turtleObstacleImage);
+        break;
+      case 3:
+        obstacle.addImage(obstacle3);
+        break;
+    }
+
+    obstacle.lifetime = 300;
+    obstaclesGroup.add(obstacle);
   }
 }
